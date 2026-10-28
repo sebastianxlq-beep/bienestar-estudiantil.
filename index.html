@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Bienestar estudiantil – Estados de cuenta</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<!-- ===== Acceso ===== -->
+<div id="lg" class="lgw" hidden><div class="card">
+  <h1>Bienestar estudiantil</h1>
+  <p class="sub">Estados de cuenta de los estudiantes</p>
+
+  <div id="tabs" class="seg"><button data-m="in" class="on">Entrar</button><button data-m="up" id="tabUp">Crear cuenta</button></div>
+
+  <div id="f-in-up">
+    <label for="lc">Cédula de identidad (es su usuario)</label>
+    <input id="lc" inputmode="numeric" autocomplete="username" placeholder="Solo números, sin guiones">
+    <label for="lp">Contraseña</label>
+    <input id="lp" type="password" autocomplete="current-password" placeholder="Mínimo 8 caracteres">
+    <div id="up" hidden>
+      <label for="lp2">Repita la contraseña</label><input id="lp2" type="password" autocomplete="new-password">
+      <label for="lcor">Correo (para recuperar su contraseña)</label><input id="lcor" type="email" autocomplete="email">
+      <div class="g2"><div><label for="lgr">Grado que guía</label><select id="lgr"></select></div><div><label for="lse">Sección</label><select id="lse"></select></div></div>
+      <div id="codeBox" hidden><label for="lcod">Código de registro (se lo da el administrador)</label><input id="lcod" autocomplete="off"></div>
+    </div>
+  </div>
+
+  <div id="f-forgot" hidden>
+    <p class="sub">Escriba su cédula. Si su cuenta tiene un correo registrado, le enviaremos un enlace para crear una contraseña nueva.</p>
+    <label for="fc">Cédula</label><input id="fc" inputmode="numeric">
+  </div>
+
+  <div id="f-reset" hidden>
+    <p class="sub">Escriba su nueva contraseña.</p>
+    <label for="rp">Nueva contraseña</label><input id="rp" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+    <label for="rp2">Repita la contraseña</label><input id="rp2" type="password" autocomplete="new-password">
+  </div>
+
+  <p class="msg" id="lm" role="alert"></p>
+  <button class="p" id="go" style="width:100%">Entrar</button>
+  <p class="note" style="text-align:center"><button class="lnk" id="lnkForgot" hidden>Olvidé mi contraseña</button> <button class="lnk" id="lnkBack" hidden>Volver</button></p>
+  <p class="note" id="lst"></p>
+</div></div>
+
+<!-- ===== Aplicación ===== -->
+<main id="app" hidden>
+  <div class="bar"><div><h1>Estados de cuenta</h1><div class="sub" id="who" style="margin:0"></div></div><span class="sp"></span><button id="acct">Mi cuenta</button><button id="out">Salir</button></div>
+  <p class="warn" id="mailWarn" hidden>El envío de correos no está configurado en el servidor. Puede usar “Abrir en mi correo” para enviar los avisos desde su programa de correo.</p>
+
+  <div class="bar">
+    <button class="p" id="add">+ Agregar un estudiante</button>
+    <button id="exp">Descargar Excel actualizado</button>
+    <label class="btn p" style="margin:0">Subir Excel con estudiantes<input id="file" type="file" accept=".xlsx,.xls,.csv" hidden></label>
+    <button id="tpl">Descargar plantilla Excel</button>
+    <button class="adm" id="usr" hidden>Usuarios</button>
+    <button class="adm" id="bak" hidden>Descargar respaldo</button>
+    <button class="adm d" id="yr" hidden>Nuevo año</button>
+  </div>
+
+  <details class="box" id="ayuda" style="margin-top:0"><summary><b>¿Dónde pongo los datos en el Excel?</b></summary>
+  <p class="sub" style="margin:8px 0">Un estudiante por fila, desde la fila 2 (la fila 1 son los títulos). Descargue “Plantilla Excel” para tenerlo listo. El sistema reconoce las columnas por su título y le muestra una revisión antes de guardar.</p>
+  <div class="tw hp"><table><thead><tr><th>Columna</th><th>Qué escribir</th><th>Ejemplo</th></tr></thead><tbody>
+  <tr><td><b>A</b></td><td>Nombre del estudiante (obligatorio)</td><td>Ana Pérez Rojas</td></tr>
+  <tr><td><b>B</b></td><td>Cédula del estudiante (obligatorio, única)</td><td>123456789</td></tr>
+  <tr><td><b>C</b></td><td>Grado, número del 7 al 12 (obligatorio)</td><td>7</td></tr>
+  <tr><td><b>D</b></td><td>Sección, grado-número (obligatorio)</td><td>7-1</td></tr>
+  <tr><td><b>E</b></td><td>Nombre del encargado (obligatorio)</td><td>María Rojas Vargas</td></tr>
+  <tr><td><b>F</b></td><td>Correo del encargado (obligatorio)</td><td>maria.rojas@correo.com</td></tr>
+  <tr><td><b>G</b></td><td>Teléfono (opcional)</td><td>8888-0000</td></tr>
+  <tr><td><b>H</b></td><td>Monto adeudado en colones, solo el número (opcional; solo para estudiantes nuevos)</td><td>45000</td></tr>
+  <tr><td><b>I</b></td><td>Concepto (opcional)</td><td>Matrícula</td></tr>
+  </tbody></table></div></details>
+
+  <div id="home">
+    <div class="bar"><div style="flex:1;min-width:200px"><input id="gq" placeholder="Buscar un estudiante por nombre, cédula o encargado" aria-label="Buscar en todas las secciones"></div></div>
+    <div id="gres"></div>
+    <div id="grades"></div>
+  </div>
+
+  <div id="secv" hidden>
+    <div class="bar"><button id="bk">← Volver a los grados</button><h2 id="stt"></h2></div>
+    <div class="sum" id="sum"></div>
+    <div class="bar">
+      <div style="flex:1;min-width:200px"><input id="q" placeholder="Buscar por nombre, cédula o encargado" aria-label="Buscar"></div>
+      <div><select id="fl" aria-label="Filtrar"><option value="">Todos</option><option value="pe">Con saldo pendiente</option><option value="pa">Al día</option><option value="fa">Con saldo a favor</option><option value="sc">Sin cargos</option></select></div>
+    </div>
+    <div class="tw"><table>
+    <thead><tr><th>Estudiante</th><th class="hm">Cédula</th><th class="hm">Encargado</th><th class="r hm">Total a pagar</th><th class="r hm">Total abonado</th><th class="r">Saldo</th><th>Estado de cuenta</th></tr></thead>
+    <tbody id="rows"></tbody></table></div>
+  </div>
+  <p class="note">Todo lo que anote se guarda de inmediato en la base de datos. Los montos están en colones costarricenses (₡).</p>
+</main>
+
+<dialog id="dt"></dialog>
+<dialog id="em"></dialog>
+<div id="toast" role="status"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
